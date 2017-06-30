@@ -23,8 +23,10 @@ docker push "$1"/node:6.2.2_"$buildnumber"
 docker push "$1"/node:6.6.0_"$buildnumber"
 docker push "$1"/node:6.9.3_"$buildnumber"
 docker push "$1"/node:6.10.3_"$buildnumber"
+docker push "$1"/node:lts_"$buildnumber"
 docker push "$1"/node:6.11.0_"$buildnumber"
 docker push "$1"/node:8.0.0_"$buildnumber"
+docker push "$1"/node:latest_"$buildnumber"
 docker push "$1"/node:8.1.2_"$buildnumber"
 
 docker logout
