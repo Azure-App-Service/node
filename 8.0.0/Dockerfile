@@ -8,7 +8,7 @@ COPY sshd_config /etc/ssh/
 RUN mkdir -p /home/LogFiles \
      && echo "root:Docker!" | chpasswd \
      && apt update \
-     && apt install -y --no-install-recommends openssh-server
+     && apt install -y --no-install-recommends openssh-server vim curl wget tcptraceroute
 
 # Workaround for https://github.com/npm/npm/issues/16892
 # Running npm install as root blows up in a  --userns-remap

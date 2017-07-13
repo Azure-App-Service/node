@@ -9,7 +9,7 @@ RUN npm install -g pm2 \
      && mkdir -p /home/LogFiles \
      && echo "root:Docker!" | chpasswd \
      && apt update \
-     && apt install -y --no-install-recommends openssh-server \
+     && apt install -y --no-install-recommends openssh-server vim curl wget tcptraceroute \
      && cd /opt/startup \
      && npm install \
      && chmod 755 /opt/startup/init_container.sh
