@@ -37,7 +37,7 @@ if (!startupCommand) {
         var filename = "/home/site/wwwroot/" + autos[i];
         if (fs.existsSync(filename)) {
             console.log("No startup command entered, but found " + filename);
-            startupCommand = "node " + filename;
+            startupCommand = "pm2 start " + filename+ " --no-daemon";
             break;
         }
     }
@@ -47,7 +47,12 @@ if (!startupCommand) {
 if (!startupCommand) {
     console.log("No startup command or autodetected startup script " +
         "found. Running default static site.");
-    startupCommand = "node " + DEFAULTAPP;
+    startupCommand = "pm2 start " + DEFAULTAPP + " --no-daemon";
+}
+
+if (startupCommand && fs.existsSync(startupCommand)) {
+    // Run with pm2
+    startupCommand = "pm2 start " + startupCommand + " --no-daemon";
 }
 
 // If HTTP logging is enabled and it doesn't appear that the user has tried to do any
