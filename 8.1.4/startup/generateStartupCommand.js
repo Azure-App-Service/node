@@ -55,17 +55,5 @@ if (startupCommand && fs.existsSync(startupCommand)) {
     startupCommand = "pm2 start " + startupCommand + " --no-daemon";
 }
 
-// If HTTP logging is enabled and it doesn't appear that the user has tried to do any
-// redirection in their startup command, redirect stdout and stderr to files.
-if (httpLoggingEnabled) {
-    if (startupCommand.indexOf(">") === -1) {
-        console.log("HTTP logging enabled and no output redirection present in startup "
-         + "command. Redirecting stdout and stderr to files.")
-        var outFile = util.format('/home/LogFiles/node_%s_out.log', roleInstanceId);
-        var errFile = util.format('/home/LogFiles/node_%s_err.log', roleInstanceId);
-        startupCommand += util.format(" >> %s 2>> %s", outFile, errFile);
-    }
-}
-
 // Write to file
 fs.writeFileSync(CMDFILE, startupCommand);
