@@ -1,4 +1,19 @@
 #!/usr/bin/env bash
+cat >/etc/motd <<EOL 
+  _____                               
+  /  _  \ __________ _________   ____  
+ /  /_\  \\___   /  |  \_  __ \_/ __ \ 
+/    |    \/    /|  |  /|  | \/\  ___/ 
+\____|__  /_____ \____/ |__|    \___  >
+        \/      \/                  \/ 
+   W E B   A P P   O N   L I N U X
+
+Documentation: http://aka.ms/webapp-linux
+NodeJS quickstart: https://aka.ms/node-qs
+
+EOL
+cat /etc/motd
+
 service ssh start
 
 mkdir "$PM2HOME"

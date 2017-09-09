@@ -7,6 +7,7 @@ COPY sshd_config /etc/ssh/
 
 RUN mkdir -p /home/LogFiles \
      && echo "root:Docker!" | chpasswd \
+     && echo "cd /" >> /etc/bash.bashrc \
      && apt update \
      && apt install -y --no-install-recommends openssh-server vim curl wget tcptraceroute
 
