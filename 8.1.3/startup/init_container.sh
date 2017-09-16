@@ -6,7 +6,7 @@ cat >/etc/motd <<EOL
 /    |    \/    /|  |  /|  | \/\  ___/ 
 \____|__  /_____ \____/ |__|    \___  >
         \/      \/                  \/ 
-   W E B   A P P   O N   L I N U X
+A P P   S E R V I C E   O N   L I N U X
 
 Documentation: http://aka.ms/webapp-linux
 NodeJS quickstart: https://aka.ms/node-qs
