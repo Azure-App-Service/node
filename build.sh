@@ -19,7 +19,8 @@ docker build -t "$1"/node:8.1.2_"$buildnumber" 8.1.2
 docker build -t "$1"/node:8.1.3_"$buildnumber" 8.1.3
 docker build -t "$1"/node:8.1.4_"$buildnumber" 8.1.4
 docker build -t "$1"/node:8.2.1_"$buildnumber" 8.2.1
-docker build -t "$1"/node:8.8.0_"$buildnumber" -t "$1"/node:latest_"$buildnumber" 8.8.0
+docker build -t "$1"/node:8.8.0_"$buildnumber" 8.8.0
+docker build -t "$1"/node:9.4.0_"$buildnumber" -t "$1"/node:latest_"$buildnumber" 9.4.0
 
 docker login -u "$2" -p "$3"
 
@@ -41,6 +42,7 @@ docker push "$1"/node:8.1.3_"$buildnumber"
 docker push "$1"/node:8.1.4_"$buildnumber"
 docker push "$1"/node:8.2.1_"$buildnumber"
 docker push "$1"/node:8.8.0_"$buildnumber"
+docker push "$1"/node:9.4.0_"$buildnumber"
 docker push "$1"/node:latest_"$buildnumber"
 
 docker logout
