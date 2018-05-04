@@ -30,7 +30,7 @@ if (!startupCommand) {
     }
 }
 
-var finalCommand = null;
+var finalCommand = startupCommand;
 
 // No scripts.start; can we autodetect an app?
 if (!startupCommand) {
