@@ -20,17 +20,26 @@ if (typeof process.env.WEBSITE_ROLE_INSTANCE_ID !== 'undefined'
 
 var startupCommand = fs.readFileSync(CMDFILE, 'utf8').trim();
 
+const CUSTOM_STARTUP_CMD_FLAG = "/opt/startup/CUSTOM_STARTUP_CMD_FLAG";
+fs.writeFileSync(CUSTOM_STARTUP_CMD_FLAG, "FALSE");
+if (startupCommand) {
+    fs.writeFileSync(CUSTOM_STARTUP_CMD_FLAG, "TRUE"); // set CUSTOM_STARTUP_CMD_FLAG for remote debugging
+}
+
 // No user-provided startup command, check for scripts.start
+const PACKAGE_JSON_FLAG = "/opt/startup/PACKAGE_JSON_FLAG";
+fs.writeFileSync(PACKAGE_JSON_FLAG, "FALSE");
 if (!startupCommand) {
     var packageJsonPath = "/home/site/wwwroot/package.json";
     var json = fs.existsSync(packageJsonPath) && JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
     if (typeof json == 'object' && typeof json.scripts == 'object' && typeof json.scripts.start == 'string') {
         console.log("Found scripts.start in package.json")
         startupCommand = 'npm start';
+        fs.writeFileSync(PACKAGE_JSON_FLAG, "TRUE"); // set PACKAGE_JSON_FLAG for remote debugging
     }
 }
 
-var finalCommand = startupCommand;
+var nodeFile = startupCommand;
 
 // No scripts.start; can we autodetect an app?
 if (!startupCommand) {
@@ -39,38 +48,31 @@ if (!startupCommand) {
         var filename = "/home/site/wwwroot/" + autos[i];
         if (fs.existsSync(filename)) {
             console.log("No startup command entered, but found " + filename);
-            finalCommand = filename;
+            nodeFile = filename;
             break;
         }
     }
 }
 
 // Still nothing, run the default static site
-if (!startupCommand && !finalCommand) {
+if (!startupCommand && !nodeFile) {
     console.log("No startup command or autodetected startup script " +
         "found. Running default static site.");
-    finalCommand = DEFAULTAPP;
+    nodeFile = DEFAULTAPP;
 }
 
-if (finalCommand && fs.existsSync(finalCommand)) {
-    if (process.env.APPSVC_REMOTE_DEBUGGING == "TRUE")
-    {
-        if (process.env.APPSVC_REMOTE_DEBUGGING_BREAK == "TRUE")
-        {
-            startupCommand = "node --inspect-brk=0.0.0.0:" + process.env.APPSVC_TUNNEL_PORT + " " + finalCommand;
+if (!startupCommand && nodeFile && fs.existsSync(nodeFile)) {
+    if (process.env.APPSVC_REMOTE_DEBUGGING == "TRUE") {
+        if (process.env.APPSVC_REMOTE_DEBUGGING_BREAK == "TRUE") {
+            startupCommand = "node --inspect-brk=0.0.0.0:" + process.env.APPSVC_TUNNEL_PORT + " " + nodeFile;
+        } else {
+            startupCommand = "node --inspect=0.0.0.0:" + process.env.APPSVC_TUNNEL_PORT + " " + nodeFile;
         }
-        else
-        {
-            startupCommand = "node --inspect=0.0.0.0:" + process.env.APPSVC_TUNNEL_PORT + " " + finalCommand;
-        }
-    }
-    else
-    {
+    } else {
         // Run with pm2
-        startupCommand = "pm2 start " + finalCommand + " --no-daemon";
+        startupCommand = "pm2 start " + nodeFile + " --no-daemon";
     }
 }
-
 
 // Write to file
 fs.writeFileSync(CMDFILE, startupCommand);
