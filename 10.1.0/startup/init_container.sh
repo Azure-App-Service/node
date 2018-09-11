@@ -29,7 +29,11 @@ then
         mv /opt/startup/node-wrapper.sh /usr/local/bin/node
         chmod a+x /usr/local/bin/node
         sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/npm/bin/npm-cli.js
+        sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/npm/bin/npx-cli.js
         sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/pm2/bin/pm2
+        sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/pm2/bin/pm2-dev
+        sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/pm2/bin/pm2-docker
+        sed -i 's/env node/env node-original/' /usr/local/lib/node_modules/pm2/bin/pm2-runtime
         sed -i 's/env node/env node-original/' /opt/startup/generateStartupCommand.js
 fi
 
