@@ -24,6 +24,7 @@ RUN npm install -g pm2 \
      && apk add bash \
      && cd /opt/startup \
      && npm install \
+     && npm install npm@latest -g \
      && chmod 755 /opt/startup/init_container.sh
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
