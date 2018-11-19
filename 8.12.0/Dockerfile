@@ -1,4 +1,4 @@
-FROM node:8.12.0-alpine
+FROM oryxprod/node-8.12:20181025.5
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 COPY startup /opt/startup
