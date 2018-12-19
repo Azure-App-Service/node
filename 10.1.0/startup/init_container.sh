@@ -10,6 +10,7 @@ A P P   S E R V I C E   O N   L I N U X
 
 Documentation: http://aka.ms/webapp-linux
 NodeJS quickstart: https://aka.ms/node-qs
+NodeJS Version : `node --version`
 
 EOL
 cat /etc/motd
@@ -37,15 +38,12 @@ then
         sed -i 's/env node/env node-original/' /opt/startup/generateStartupCommand.js
 fi
 
+# starting sshd process
+/usr/sbin/sshd
+
 echo "$@" > /opt/startup/startupCommand
 node /opt/startup/generateStartupCommand.js
-chmod 755 /opt/startup/startupCommand
+
 STARTUPCOMMAND=$(cat /opt/startup/startupCommand)
 echo "Running $STARTUPCOMMAND"
-eval "exec $STARTUPCOMMAND" &
-
-# Ensure this happens after /sbin/init
-( sleep 5 ; /etc/init.d/sshd restart ) &
-
-# Needs to start as PID 1 for openrc on alpine
-exec -c /sbin/init 
+eval "exec $STARTUPCOMMAND" 

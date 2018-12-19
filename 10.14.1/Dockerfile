@@ -1,11 +1,11 @@
-FROM oryxprod/node-9.4:20181025.5
+FROM oryxprod/node-10.14:20181217.1
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/community" >> /etc/apk/repositories; \
     echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/main" >> /etc/apk/repositories;
-
+    
 RUN npm install -g pm2 \
      && mkdir -p /home/LogFiles /opt/startup \
      && echo "root:Docker!" | chpasswd \

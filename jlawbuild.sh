@@ -22,6 +22,7 @@ docker tag "$1"/node:lts_"$buildnumber" "$1"/node:lts
 docker build  -t "$1"/node:9.4_"$buildnumber" 9.4.0
 docker build  -t "$1"/node:10.1_"$buildnumber" 10.1.0
 docker build  -t "$1"/node:10.10_"$buildnumber" -t "$1"/node:latest_"$buildnumber" 10.10.0
+docker build  -t "$1"/node:10.14_"$buildnumber" 10.14.1
 docker tag "$1"/node:latest_"$buildnumber" "$1"/node:latest 
 
 #docker login -u "$2" -p "$3"

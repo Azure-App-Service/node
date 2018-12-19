@@ -28,6 +28,7 @@ docker tag "$1"/node:lts_"$buildnumber" "$1"/node:lts
 docker build --no-cache -t "$1"/node:9.4.0_"$buildnumber" 9.4.0
 docker build --no-cache -t "$1"/node:10.1.0_"$buildnumber" 10.1.0
 docker build --no-cache -t "$1"/node:10.10.0_"$buildnumber" -t "$1"/node:latest_"$buildnumber" 10.10.0
+docker build --no-cache -t "$1"/node:10.14.1_"$buildnumber" 10.14.1
 docker tag "$1"/node:latest_"$buildnumber" "$1"/node:latest 
 
 docker login -u "$2" -p "$3"
@@ -58,6 +59,7 @@ docker push "$1"/node:lts
 docker push "$1"/node:9.4.0_"$buildnumber"
 docker push "$1"/node:10.1.0_"$buildnumber"
 docker push "$1"/node:10.10.0_"$buildnumber"
+docker push "$1"/node:10.14.1_"$buildnumber"
 docker push "$1"/node:latest_"$buildnumber"
 docker push "$1"/node:latest
 
