@@ -31,4 +31,3 @@ node /opt/startup/generateStartupCommand.js
 STARTUPCOMMAND=$(cat /opt/startup/startupCommand)
 echo "Running $STARTUPCOMMAND"
 eval "exec $STARTUPCOMMAND" 
- 
