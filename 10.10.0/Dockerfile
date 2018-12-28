@@ -17,7 +17,9 @@ RUN npm install -g pm2 \
      && apk add curl \
      && apk add wget \
      && apk add tcptraceroute \
-     && apk add bash 
+     && apk add bash \
+     && npm install npm@latest -g
+
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
 RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \
