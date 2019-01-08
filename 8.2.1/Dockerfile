@@ -1,4 +1,4 @@
-FROM oryxprod/node-8.2:20181025.5
+FROM oryxprod/node-8.2:20190103.1
 MAINTAINER Azure App Services Container Images <appsvc-images@microsoft.com>
 
 COPY startup /opt/startup

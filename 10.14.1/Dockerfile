@@ -1,4 +1,4 @@
-FROM oryxprod/node-10.14:20181217.1
+FROM oryxprod/node-10.14:20190103.1
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
