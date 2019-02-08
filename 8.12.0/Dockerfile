@@ -1,9 +1,6 @@
-FROM oryxprod/node-8.12:20181112.1
-LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
+FROM  oryxprod/node-8.12:20190104.1
 
-COPY startup /opt/startup
-COPY hostingstart.html /home/site/wwwroot/hostingstart.html
-COPY sshd_config /etc/ssh/
+LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
 
@@ -11,7 +8,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/community" >> /etc/apk/repos
     echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/main" >> /etc/apk/repositories;
 
 RUN npm install -g pm2 \
-     && mkdir -p /home/LogFiles \
+     && mkdir -p /home/LogFiles /opt/startup \
      && echo "root:Docker!" | chpasswd \
      && echo "cd /home" >> /etc/bash.bashrc \
      && apk update --no-cache \
@@ -21,10 +18,8 @@ RUN npm install -g pm2 \
      && apk add curl \
      && apk add wget \
      && apk add tcptraceroute \
-     && apk add bash \
-     && cd /opt/startup \
-     && npm install \
-     && chmod 755 /opt/startup/init_container.sh
+     && apk add bash
+
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
 RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \
@@ -45,6 +40,21 @@ RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \
     # Can't do cgroups
     && sed -i 's/cgroup_add_service /# cgroup_add_service /g' /lib/rc/sh/openrc-run.sh \
     && sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh
+
+# setup default site
+COPY startup /opt/startup
+COPY hostingstart.html /opt/startup
+
+# configure startup
+COPY sshd_config /etc/ssh/
+COPY ssh_setup.sh /tmp
+RUN chmod -R +x /opt/startup \
+   && chmod -R +x /tmp/ssh_setup.sh \
+   && (sleep 1;/tmp/ssh_setup.sh 2>&1 > /dev/null) \
+   && rm -rf /tmp/* \
+   && cd /opt/startup \
+   && npm install 
+
 
 EXPOSE 2222 8080
 

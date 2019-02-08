@@ -1,4 +1,5 @@
-FROM node:10.10.0-alpine
+FROM  oryxprod/node-10.10:20190104.1
+
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
@@ -17,8 +18,7 @@ RUN npm install -g pm2 \
      && apk add curl \
      && apk add wget \
      && apk add tcptraceroute \
-     && apk add bash \
-     && npm install npm@latest -g
+     && apk add bash
 
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
