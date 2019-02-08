@@ -35,6 +35,9 @@ function getStartupCommand(CMDFILE) {
     // eg: npm start
     if (userStartupCommand.indexOf(" ") != -1) {
         console.log("Found command: "+ userStartupCommand);
+        if (userStartupCommand.startsWith("pm2") && userStartupCommand.indexOf("--no-daemon") == -1){
+            userStartupCommand = userStartupCommand + " --no-daemon"
+        }
         return userStartupCommand;
     }
 
