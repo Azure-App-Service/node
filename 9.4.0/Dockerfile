@@ -1,4 +1,5 @@
-FROM oryxprod/node-9.4:20181025.5
+FROM  oryxprod/node-9.4:20190104.1
+
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
@@ -17,7 +18,8 @@ RUN npm install -g pm2 \
      && apk add curl \
      && apk add wget \
      && apk add tcptraceroute \
-     && apk add bash 
+     && apk add bash
+
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
 RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \

@@ -1,11 +1,12 @@
-FROM oryxprod/node-10.14:20181217.1
+FROM  oryxprod/node-10.14:20190104.1
+
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
 RUN echo "ipv6" >> /etc/modules
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/community" >> /etc/apk/repositories; \
     echo "http://dl-cdn.alpinelinux.org/alpine/v3.6/main" >> /etc/apk/repositories;
-    
+
 RUN npm install -g pm2 \
      && mkdir -p /home/LogFiles /opt/startup \
      && echo "root:Docker!" | chpasswd \
@@ -17,7 +18,8 @@ RUN npm install -g pm2 \
      && apk add curl \
      && apk add wget \
      && apk add tcptraceroute \
-     && apk add bash 
+     && apk add bash
+
 
 # https://github.com/dockage/alpine/blob/master/3.8/openrc/Dockerfile
 RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \

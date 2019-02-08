@@ -22,6 +22,9 @@ ln -s /home/LogFiles "$PM2HOME"/logs
 # Get environment variables to show up in SSH session
 eval $(printenv | awk -F= '{print "export " $1"="$2 }' >> /etc/profile)
 
+# starting sshd process
+/usr/sbin/sshd
+
 # feature flag for remote debugging for with npm
 # set flag and restart site to remove these changes
 if [ "$APPSVC_REMOTE_DEBUGGING" = "TRUE" ] && [ ! "$APPSETTING_REMOTE_DEBUGGING_FEATURE_FLAG" = "FALSE" ]
@@ -38,11 +41,9 @@ then
         sed -i 's/env node/env node-original/' /opt/startup/generateStartupCommand.js
 fi
 
-# starting sshd process
-/usr/sbin/sshd
-
 echo "$@" > /opt/startup/startupCommand
 node /opt/startup/generateStartupCommand.js
+chmod 755 /opt/startup/startupCommand
 
 STARTUPCOMMAND=$(cat /opt/startup/startupCommand)
 echo "Running $STARTUPCOMMAND"
