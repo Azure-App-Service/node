@@ -44,7 +44,7 @@ fi
 #
 # Extract dependencies if required:
 #
-if [ -f "oryx-manifest.toml" ] && [ ! "$APPSVC_RUN_ZIP" = "TRUE"] ; then
+if [ -f "oryx-manifest.toml" ] && [ ! "$APPSVC_RUN_ZIP" = "TRUE" ] ; then
     echo "Found 'oryx-manifest.toml', checking if node_modules was compressed..."
     source "oryx-manifest.toml"
     if [ ${compressedNodeModulesFile: -4} == ".zip" ]; then
