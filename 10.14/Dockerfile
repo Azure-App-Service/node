@@ -1,4 +1,4 @@
-FROM  oryxprod/node-10.14:20190104.1
+FROM oryxprod/node-10.14:20190401.5
 
 LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.com>"
 
@@ -42,11 +42,18 @@ RUN sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab \
     && sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh
 
 # setup default site
+RUN rm -f /etc/ssh/sshd_config
+COPY sshd_config /etc/ssh/
 COPY startup /opt/startup
 COPY hostingstart.html /opt/startup
 
 # configure startup
+RUN mkdir -p /tmp
 COPY sshd_config /etc/ssh/
+
+# https://github.com/moby/moby/issues/36573
+RUN : 
+
 COPY ssh_setup.sh /tmp
 RUN chmod -R +x /opt/startup \
    && chmod -R +x /tmp/ssh_setup.sh \
@@ -56,11 +63,12 @@ RUN chmod -R +x /opt/startup \
    && npm install 
 
 
+ENV PORT 8080
+ENV SSH_PORT 2222
 EXPOSE 2222 8080
 
 ENV PM2HOME /pm2home
 
-ENV PORT 8080
 ENV WEBSITE_ROLE_INSTANCE_ID localRoleInstance
 ENV WEBSITE_INSTANCE_ID localInstance
 ENV PATH ${PATH}:/home/site/wwwroot
