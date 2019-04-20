@@ -41,6 +41,38 @@ then
         sed -i 's/env node/env node-original/' /opt/startup/generateStartupCommand.js
 fi
 
+#
+# Extract dependencies if required:
+#
+if [ -f "oryx-manifest.toml" ] && [ ! "$APPSVC_RUN_ZIP" = "TRUE" ] ; then
+    echo "Found 'oryx-manifest.toml', checking if node_modules was compressed..."
+    source "oryx-manifest.toml"
+    if [ ${compressedNodeModulesFile: -4} == ".zip" ]; then
+        echo "Found zip-based node_modules."
+        extractionCommand="unzip -q $compressedNodeModulesFile -d /node_modules"
+    elif [ ${compressedNodeModulesFile: -7} == ".tar.gz" ]; then
+        echo "Found tar.gz based node_modules."
+        extractionCommand="tar -xzf $compressedNodeModulesFile -C /node_modules"
+    fi
+    if [ ! -z "$extractionCommand" ]; then
+        echo "Removing existing modules directory..."
+        rm -fr /node_modules
+        mkdir -p /node_modules
+        echo "Extracting modules..."
+        $extractionCommand
+        # NPM adds the current directory's node_modules/.bin folder to PATH before it runs, so commands in
+        # "npm start" can files there. Since we move node_modules, we have to add it to the path ourselves.
+        export PATH=/node_modules/.bin:$PATH
+        # To avoid having older versions of packages available, we delete existing node_modules folder.
+		# We do so in the background to not block the app's startup.
+        if [ -d node_modules ]; then
+            mv -f node_modules _del_node_modules || true
+            nohup rm -fr _del_node_modules &> /dev/null &
+        fi
+    fi
+    echo "Done."
+fi
+
 echo "$@" > /opt/startup/startupCommand
 node /opt/startup/generateStartupCommand.js
 chmod 755 /opt/startup/startupCommand
