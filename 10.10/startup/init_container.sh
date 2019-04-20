@@ -61,6 +61,15 @@ if [ -f "oryx-manifest.toml" ] && [ ! "$APPSVC_RUN_ZIP" = "TRUE" ] ; then
         mkdir -p /node_modules
         echo "Extracting modules..."
         $extractionCommand
+        # NPM adds the current directory's node_modules/.bin folder to PATH before it runs, so commands in
+        # "npm start" can files there. Since we move node_modules, we have to add it to the path ourselves.
+        export PATH=/node_modules/.bin:$PATH
+        # To avoid having older versions of packages available, we delete existing node_modules folder.
+		# We do so in the background to not block the app's startup.
+        if [ -d node_modules ]; then
+            mv -f node_modules _del_node_modules || true
+            nohup rm -fr _del_node_modules &> /dev/null &
+        fi
     fi
     echo "Done."
 fi
